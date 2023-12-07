@@ -29,9 +29,9 @@ public class Drive : MonoBehaviour
             clockwise = -1;
 
         float unityAngle = Vector3.SignedAngle(tF, fD, this.transform.forward);
-        this.transform.Rotate(0, 0, (angle * clockwise * Mathf.Rad2Deg) * 0.02f);
+        this.transform.Rotate(0, 0, (angle * clockwise * Mathf.Rad2Deg) * 0.01f);
     }
-    float autoSpeed = 0.1f;
+    float autoSpeed = 0.06f;
     void AutoPilot()
     {
         CalculateAngle();
@@ -45,12 +45,13 @@ public class Drive : MonoBehaviour
         Vector3 crossProd = new Vector3 (xMult, yMult, zMult);
         return crossProd;
     }
-    void CalculateDistance()
+    float CalculateDistance()
     {
         Vector3 tP = this.transform.position;
         Vector3 fP = fuel.transform.position;
         float distance = Mathf.Sqrt(Mathf.Pow(tP.x - fP.x, 2) + Mathf.Pow(tP.y - fP.y, 2));
         Debug.Log("Distance: " +  distance);
+        return distance;
     }
     void Update()
     {
@@ -80,7 +81,8 @@ public class Drive : MonoBehaviour
         }
         if (autoPilot)
         {
-            AutoPilot();
+            if (CalculateDistance() > 5)
+                AutoPilot();
         }
     }
 }
